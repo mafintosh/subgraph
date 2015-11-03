@@ -44,12 +44,12 @@ Optionally you can provide a `link` in the constructor for the first node to app
 
 #### `var rs = sg.createReadStream(key)`
 
-Create a read stream from a link.
+Create a read stream from a key.
 Will read out values in reverse order of writes to the append stream.
 
 #### `var ws = sg.createWriteStream(key)`
 
-Create a write stream from a link. Will verify that the values written matches the link when hashed.
+Create a write stream from a key. Will verify that the values written matches the key when hashed.
 
 #### `sg.add(link, value, [cb])`
 

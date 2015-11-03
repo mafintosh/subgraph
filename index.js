@@ -34,9 +34,9 @@ Subgraph.prototype.add = function (link, value, cb) {
   }
 }
 
-Subgraph.prototype.resumable = function (link, cb) {
-  var rs = this.createReadStream(link)
-  var latest = link
+Subgraph.prototype.resumable = function (key, cb) {
+  var rs = this.createReadStream(key)
+  var latest = key
 
   rs.on('data', function (data) {
     latest = data.link
@@ -99,7 +99,7 @@ Subgraph.prototype.createAppendStream = function (link) {
 }
 
 Subgraph.prototype.createWriteStream = function (link) {
-  if (!link) throw new Error('link is required')
+  if (!link) throw new Error('key is required')
   link = toBuffer(link)
 
   var self = this
@@ -126,7 +126,7 @@ Subgraph.prototype.createWriteStream = function (link) {
 }
 
 Subgraph.prototype.createReadStream = function (link) {
-  if (!link) throw new Error('link is required')
+  if (!link) throw new Error('key is required')
   link = toBuffer(link)
 
   var self = this
