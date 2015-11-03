@@ -1,6 +1,6 @@
 {
   "name": "subgraph",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Content addressable graph where every node has at most a single link to another node",
   "main": "index.js",
   "dependencies": {
