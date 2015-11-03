@@ -34,19 +34,20 @@ Subgraph.prototype.add = function (link, value, cb) {
   }
 }
 
-Subgraph.prototype.resumable = function (key, cb) {
+Subgraph.prototype.root = function (key, cb) {
   var rs = this.createReadStream(key)
-  var latest = key
+  var root = null
 
   rs.on('data', function (data) {
-    latest = data.link
+    root = data
   })
 
   rs.on('error', done)
   rs.on('end', done)
 
-  function done () {
-    cb(null, latest)
+  function done (err) {
+    if (err) return cb(err)
+    cb(null, root)
   }
 }
 

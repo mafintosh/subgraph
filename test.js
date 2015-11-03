@@ -197,16 +197,16 @@ tape('resumable write stream', function (t) {
     rs.on('data', function () {
       rs.destroy()
       ws.end(function () {
-        copy.resumable(stream.key, function (err, key) {
+        copy.root(stream.key, function (err, root) {
           t.error(err, 'no error')
-          t.ok(key, 'is resumable')
-          var rs = sg.createReadStream(key)
-          var ws = copy.createWriteStream(key)
+          t.ok(root.link, 'is resumable')
+          var rs = sg.createReadStream(root.link)
+          var ws = copy.createWriteStream(root.link)
           rs.pipe(ws).on('finish', function () {
             t.same(rs.length, 2, 'wrote to entries')
-            copy.resumable(stream.key, function (err, key) {
+            copy.root(stream.key, function (err, root) {
               t.error(err, 'no error')
-              t.ok(!key, 'no longer resumable')
+              t.ok(!root.link, 'no longer resumable')
               t.end()
             })
           })

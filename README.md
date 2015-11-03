@@ -59,10 +59,17 @@ Shorthand for only adding a single value
 
 Shorthand for getting a single value
 
-#### `sg.resumable(key, cb)`
+#### `sg.root(key, cb)`
 
-If the write stream is destroyed/ended before all values are written to it will be resumable.
-This method returns the latest missing link of a write stream.
+Returns the root of a stream. If a write stream was ended prematurely / destroyed the root returned will
+have a link property.
+
+``` js
+sg.root(someKey, function (err, node) {
+  console.log('root is', node)
+  console.log('the stream is partially written?', !!root.link)
+})
+```
 
 ## License
 
