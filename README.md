@@ -6,6 +6,8 @@ Content addressable graph where every node has at most a single link to another 
 npm install subgraph
 ```
 
+[![build status](http://img.shields.io/travis/mafintosh/subgraph.svg?style=flat)](http://travis-ci.org/mafintosh/subgraph)
+
 ## Usage
 
 ``` js
