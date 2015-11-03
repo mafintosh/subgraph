@@ -42,12 +42,12 @@ and a `.length` property that contains the number of nodes written
 
 Optionally you can provide a `link` in the constructor for the first node to append to.
 
-#### `var rs = sg.createReadStream(link)`
+#### `var rs = sg.createReadStream(key)`
 
 Create a read stream from a link.
 Will read out values in reverse order of writes to the append stream.
 
-#### `var ws = sg.createWriteStream(link)`
+#### `var ws = sg.createWriteStream(key)`
 
 Create a write stream from a link. Will verify that the values written matches the link when hashed.
 
@@ -55,11 +55,11 @@ Create a write stream from a link. Will verify that the values written matches t
 
 Shorthand for only adding a single value
 
-#### `sg.get(link, cb)`
+#### `sg.get(key, cb)`
 
 Shorthand for getting a single value
 
-#### `sg.resumable(link, cb)`
+#### `sg.resumable(key, cb)`
 
 If the write stream is destroyed/ended before all values are written to it will be resumable.
 This method returns the latest missing link of a write stream.
