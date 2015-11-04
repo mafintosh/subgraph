@@ -50,6 +50,25 @@ tape('append stream', function (t) {
   })
 })
 
+tape('append stream + prefix', function (t) {
+  var sg = subgraph(memdb(), {prefix: 'test'})
+  var stream = sg.createAppendStream()
+
+  stream.write('hello')
+  stream.write('world')
+  stream.write('verden')
+
+  stream.end(function () {
+    t.ok(stream.key, 'has key')
+    sg.get(stream.key, function (err, entry) {
+      t.error(err, 'no error')
+      t.same(entry.value.toString(), 'verden')
+      t.same(entry.index, 2)
+      t.end()
+    })
+  })
+})
+
 tape('append stream with link', function (t) {
   var sg = subgraph(memdb())
   var stream = sg.createAppendStream()

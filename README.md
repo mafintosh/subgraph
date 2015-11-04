@@ -30,9 +30,15 @@ ws.end(function () {
 
 ## API
 
-#### `var sg = subgraph(levelupInstance)`
+#### `var sg = subgraph(levelupInstance, [options])`
 
-Create a new subgraph instance
+Create a new subgraph instance. Options include:
+
+``` js
+{
+  prefix: 'optional-sublevel-prefix'
+}
+```
 
 #### `var ws = sg.createAppendStream([link])`
 

@@ -6,13 +6,15 @@ var hash = require('./lib/hash')
 
 module.exports = Subgraph
 
-function Subgraph (db) {
-  if (!(this instanceof Subgraph)) return new Subgraph(db)
+function Subgraph (db, opts) {
+  if (!(this instanceof Subgraph)) return new Subgraph(db, opts)
+  if (!opts) opts = {}
+  this.prefix = opts.prefix ? '!' + opts.prefix + '!' : ''
   this.db = db
 }
 
 Subgraph.prototype.get = function (key, cb) {
-  this.db.get(key.toString('hex'), {valueEncoding: messages.Node}, cb)
+  this.db.get(this.prefix + key.toString('hex'), {valueEncoding: messages.Node}, cb)
 }
 
 Subgraph.prototype.add = function (link, value, cb) {
@@ -27,7 +29,7 @@ Subgraph.prototype.add = function (link, value, cb) {
   function add (index, value, link) {
     var key = hash(index, value, link)
     var entry = {index: index, value: value, link: link}
-    self.db.put(key.toString('hex'), messages.Node.encode(entry), function (err) {
+    self.db.put(self.prefix + key.toString('hex'), messages.Node.encode(entry), function (err) {
       if (err) return cb(err)
       cb(null, key)
     })
@@ -78,7 +80,7 @@ Subgraph.prototype.createAppendStream = function (link) {
       })
 
       link = hash(index, data, link)
-      batch[i] = {type: 'put', key: link.toString('hex'), value: node}
+      batch[i] = {type: 'put', key: self.prefix + link.toString('hex'), value: node}
     }
 
     self.db.batch(batch, cb)
@@ -116,7 +118,7 @@ Subgraph.prototype.createWriteStream = function (link) {
       if (!equals(hash(data.index, data.value, data.link), link)) return cb(new Error('Checksum mismatch'))
       batch[i] = {
         type: 'put',
-        key: link.toString('hex'),
+        key: self.prefix + link.toString('hex'),
         value: messages.Node.encode(data)
       }
       link = data.link
@@ -138,13 +140,12 @@ Subgraph.prototype.createReadStream = function (link) {
 
   function read (size, cb) {
     if (!link) return cb(null, null)
-    self.db.get(link.toString('hex'), {valueEncoding: 'binary'}, function (err, data) {
+    self.db.get(self.prefix + link.toString('hex'), {valueEncoding: messages.Node}, function (err, node) {
       if (err && err.notFound) {
         if (first) ready(0)
         return cb(null, null)
       }
       if (err) return cb(err)
-      var node = messages.Node.decode(data)
       var first = stream.length === -1
       if (first) ready(node.index + 1)
       link = node.link
